@@ -111,19 +111,35 @@ describe("[Exercise 6] Car", () => {
   beforeEach(() => {
     focus = new utils.Car("focus", 20, 30); // each test must start with a fresh car
   });
-  test.todo("[15] driving the car returns the updated odometer");
-  test.todo("[16] driving the car uses gas");
-  test.todo("[17] refueling allows to keep driving");
-  test.todo("[18] adding fuel to a full tank has no effect");
-});
-
-describe("[Exercise 7] isEvenNumberAsync", () => {
-  test.todo("[19] resolves true if passed an even number");
-  test.todo("[20] resolves false if passed an odd number");
-  test.todo(
-    '[21] rejects an error with the message "number must be a number" if passed a non-number type'
-  );
-  test.todo(
-    '[22] rejects an error with the message "number must be a number" if passed NaN'
-  );
+  test("[15] driving the car returns the updated odometer", () => {
+    const initialOdometer = focus.odometer;
+    const updated = focus.drive(100);
+    expect(updated).toBeGreaterThan(initialOdometer);
+    expect(updated).toEqual(100);
+  });
+  test("[16] driving the car uses gas", () => {
+    const initialFuel = focus.fuel;
+    focus.drive(100);
+    const updated = focus.fuel;
+    expect(updated).toBeLessThan(initialFuel);
+    expect(updated).toEqual(focus.tank - 100 / focus.mpg);
+  });
+  test("[17] refueling allows to keep driving", () => {
+    focus.drive(600);
+    const initialOdometer = focus.odometer;
+    focus.drive(600);
+    const secondOdometer = focus.odometer;
+    focus.refuel(100);
+    focus.drive(600);
+    const finalOdometer = focus.odometer;
+    expect(initialOdometer).toEqual(secondOdometer);
+    expect(finalOdometer).toBeGreaterThan(initialOdometer);
+  });
+  test("[18] adding fuel to a full tank has no effect", () => {
+    const initialFuel = focus.fuel;
+    focus.refuel(100);
+    const updated = focus.fuel;
+    expect(updated).toEqual(initialFuel);
+    expect(updated).toEqual(focus.tank);
+  });
 });
